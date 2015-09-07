@@ -2,9 +2,13 @@ h1. Adds Memcached Monitoring to Server Density
 
 Installation
 
-* Head to  https://youraccount.serverdensity.com/plugins/ and Add new plugin
-* Add a plugin called Memcached
-* Edit the Memcached plugin and enter these groups for the graphs, sorry you have to do this, but there's no way to suggest the layout in the plugin.
+* Configure your agent so that it knows about plugins http://www.serverdensity.com/docs/agent/plugins/ 
+* Move the Memcached.py into that directory 
+* Ensure you add a config entry for memcache specifying the host and port (defaults to 127.0.0.1:11211)
+* Restart the agent (service sd-agent restart)
+* Enjoy Memcached stats in Server Density
+
+
 
 Title: CurrentTotal
 curr_items
@@ -33,9 +37,3 @@ decr_misses
 Title: Evictions
 evictions
 reclaimed
-
-* Configure your agent so that it knows about plugins http://www.serverdensity.com/docs/agent/plugins/ 
-* Move the Memcached.py into that directory 
-* By default, we check on 127.0.0.1:11211 for Memcached, if it runs on another port edit lines 15 & 16
-* Restart the agent (service sd-agent restart)
-* Enjoy Memcached stats in Server Density
