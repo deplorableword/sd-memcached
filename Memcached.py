@@ -1,3 +1,15 @@
+
+"""
+Server Density Agent Plugin for memcached
+
+This script requires a config entry in the agent config
+
+[Memcached]
+host = '127.0.0.1'
+port = 11211
+
+"""
+
 import sys
 import telnetlib
 import re
@@ -5,6 +17,7 @@ import socket
 import logging
 import json
 import time
+
 
 class Memcached:
     def __init__(self, agentConfig, checksLogger, rawConfig):
@@ -15,8 +28,15 @@ class Memcached:
     def run(self):
         stats = {}
 
-        host = "127.0.0.1"
-        port = 11211
+        if hasattr(self.rawConfig['Memcached'], 'host'):
+            host = self.rawConfig['Memcached']['host']
+        else:
+            host = '127.0.0.1'
+
+        if hasattr(self.rawConfig['Memcached'], 'port'):
+            port = self.rawConfig['Memcached']['port']
+        else:
+            port = 11211
 
         try:
             telnet = telnetlib.Telnet()
@@ -30,6 +50,7 @@ class Memcached:
         except socket.error, reason:
             sys.stderr.write("%s\n" % reason)
             sys.stderr.write("Is memcached running?\n")
+            sys.stderr.write("Host: %s Port: %s\n" % (host, port))
             return stats
 
         # Current / Total
@@ -66,12 +87,15 @@ class Memcached:
 
         return stats
 
+
 if __name__ == '__main__':
     """
     Standalone test configuration
     """
     raw_agent_config = {
         'Memcached': {
+            'host': '127.0.0.1',
+            'port': 11211,
         }
     }
 
